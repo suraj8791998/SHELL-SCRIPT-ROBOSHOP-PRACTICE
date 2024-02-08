@@ -45,28 +45,28 @@ else
   echo "APP DIRECTORY IS ALREADY EXISTS"
 fi 
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "DOWNLOADING THE APPLICATION"
 
 cd /app 
-VALIDATE $? "MOVING INTO APPLICATION FOLDER"
+VALIDATE $? "MOVING INTO APPLICATION FOLDER" &>> $LOGS_FILE
 
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "UNZIIPING THE APPLICATION"
 
-npm install 
+npm install  &>> $LOGS_FILE
 VALIDATE $? "DOWNLOADING THE DEPENDENCIES"
 
-cp catalogue.sh /etc/systemd/system/catalogue.service
+cp catalogue.sh /etc/systemd/system/catalogue.service &>> $LOGS_FILE
 VALIDATE $? "COPYING CATALOGUE SERVICE"
 
-systemctl daemon-reload
+systemctl daemon-reload &>> $LOGS_FILE
 VALIDATE $? "DEAMON RELOADING"
 
-systemctl start catalogue
+systemctl start catalogue &>> $LOGS_FILE
 VALIDATE $? "STARTING CATALOGUE"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
 VALIDATE $? "COPYING MONGO REPO"
 
 yum install mongodb-org-shell -y
