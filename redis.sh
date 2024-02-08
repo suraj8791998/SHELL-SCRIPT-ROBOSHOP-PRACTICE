@@ -38,3 +38,6 @@ VALIDATE $? "ENABLING REDIS"
 
 systemctl start redis &>> $LOGS_FILE
 VALIDATE $? "STARTING REDIS SERVER"
+
+
+#FIND MONGODB LOGS PATH IS /var/log/redis/redis.log
