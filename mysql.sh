@@ -27,7 +27,7 @@ VALIDATE $? "DISABLING PRESENT MYSQL VERSION"
 cp mysql.repo /etc/yum.repos.d/mysql.repo &>> $LOGS_FILE
 VALIDATE $? "COPYING MYSQL REPO"
 
-yum install mysql-community-server -y
+yum install mysql-community-server -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING MYSQL COMMUNITY SERVER" &>> $LOGS_FILE
 
 systemctl enable mysqld &>> $LOGS_FILE
