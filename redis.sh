@@ -21,20 +21,20 @@ else
 fi 
 }
 
-yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>> $LOGFILE
+yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING REDIS REPO FILE"
 
-yum module enable redis:remi-6.2 -y &>> $LOGFILE
+yum module enable redis:remi-6.2 -y &>> $LOGS_FILE
 VALIDATE $? "ENABLING REDIS 6.2"
 
-yum install redis -y  &>> $LOGFILE
+yum install redis -y  &>> $LOGS_FILE
 VALIDATE $? "INSTALLING REDIS"
 
-sed -i 's/127.0.0.1/0.0.0.0/' /etc/redis.conf &>> $LOGFILE
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/redis.conf &>> $LOGS_FILE
 VALIDATE $? "REPLACING THE PORT NUMBER"
 
-systemctl enable redis &>> $LOGFILE
+systemctl enable redis &>> $LOGS_FILE
 VALIDATE $? "ENABLING REDIS"
 
-systemctl start redis &>> $LOGFILE
+systemctl start redis &>> $LOGS_FILE
 VALIDATE $? "STARTING REDIS SERVER"
