@@ -1,79 +1,89 @@
 #!/bin/bash
 
 DATE=$(date +%F)
-LOGS_DIR=/home/centos/
+LOGSDIR=/tmp
+# /home/centos/shellscript-logs/script-name-date.log
 SCRIPT_NAME=$0
-LOGS_FILE=$LOGS_DIR/$SCRIPT_NAME-$DATE.log
-
+LOGFILE=$LOGSDIR/$0-$DATE.log
 USERID=$(id -u)
-if [ $USERID -ne 0 ]
+R="\e[31m"
+G="\e[32m"
+N="\e[0m"
+Y="\e[33m"
+
+if [ $USERID -ne 0 ];
 then
-   echo "ERROR:: PLEASE SWITCH TO ROOT USER"
-   exit 1
-fi 
-
-VALIDATE(){
-if [ $1 -ne 0 ]
-then
-  echo "$2 ...IS FAILURE"
-else
-  echo "$2 ...IS SUCCESS"
-fi 
-}
-
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGS_FILE
-VALIDATE $? "SETUP NODEJS REPO"
-
-yum install nodejs -y &>> $LOGS_FILE
-VALIDATE $? "INSTALLING NODEJS"
-
-USER_NAME=$(id roboshop)
-if [ $? -ne 0 ]
-then
-  echo "USER DOES NOT EXISTS"
-  useradd roboshop &>> $LOGS_FILE
-else
-  echo "USER ALREADY EXISTS"
-fi 
-
-$DIRECTORY=/app
-if [ -d $DIRECTORY ];
-then
-  echo "DIRECTORY EXISTS"
-else
-  echo "DIRECTORY DOES NOT EXISTS"
-  mkdir /app &>> $LOGS_FILE
+    echo -e "$R ERROR:: Please run this script with root access $N"
+    exit 1
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGS_FILE
-VALIDATE $? "DOWNLOADING THE APPLICATION"
+VALIDATE(){
+    if [ $1 -ne 0 ];
+    then
+        echo -e "$2 ... $R FAILURE $N"
+        exit 1
+    else
+        echo -e "$2 ... $G SUCCESS $N"
+    fi
+}
 
-cd /app &>> $LOGS_FILE
-VALIDATE $? "MOVING INTO APPLICATION FOLDER" &>> $LOGS_FILE
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
 
-unzip /tmp/catalogue.zip &>> $LOGS_FILE
-VALIDATE $? "UNZIIPING THE APPLICATION"
+VALIDATE $? "Setting up NPM Source"
 
-npm install  &>> $LOGS_FILE
-VALIDATE $? "DOWNLOADING THE DEPENDENCIES"
+yum install nodejs -y &>>$LOGFILE
 
-cp catalogue.sevice /etc/systemd/system/catalogue.service &>> $LOGS_FILE
-VALIDATE $? "COPYING CATALOGUE SERVICE"
+VALIDATE $? "Installing NodeJS"
 
-systemctl daemon-reload &>> $LOGS_FILE
-VALIDATE $? "DEAMON RELOADING"
+#once the user is created, if you run this script 2nd time
+# this command will defnitely fail
+# IMPROVEMENT: first check the user already exist or not, if not exist then create
+useradd roboshop &>>$LOGFILE
 
-systemctl start catalogue &>> $LOGS_FILE
-VALIDATE $? "STARTING CATALOGUE"
+#write a condition to check directory already exist or not
+mkdir /app &>>$LOGFILE
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
-VALIDATE $? "COPYING MONGO REPO"
+curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 
-yum install mongodb-org-shell -y &>> $LOGS_FILE
-VALIDATE $? "INSTALLING MONGO REPO"
+VALIDATE $? "downloading catalogue artifact"
 
-mongo --host 172.31.31.225 </app/schema/catalogue.js &>> $LOGS_FILE
-VALIDATE $? "LOADING THE SHCEMA"
+cd /app &>>$LOGFILE
 
+VALIDATE $? "Moving into app directory"
 
+unzip /tmp/catalogue.zip &>>$LOGFILE
 
+VALIDATE $? "unzipping catalogue"
+
+npm install &>>$LOGFILE
+
+VALIDATE $? "Installing dependencies"
+
+# give full path of catalogue.service because we are inside /app
+cp /home/centos/roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
+
+VALIDATE $? "copying catalogue.service"
+
+systemctl daemon-reload &>>$LOGFILE
+
+VALIDATE $? "daemon reload"
+
+systemctl enable catalogue &>>$LOGFILE
+
+VALIDATE $? "Enabling Catalogue"
+
+systemctl start catalogue &>>$LOGFILE
+
+VALIDATE $? "Starting Catalogue"
+
+cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
+
+VALIDATE $? "Copying mongo repo"
+
+yum install mongodb-org-shell -y &>>$LOGFILE
+
+VALIDATE $? "Installing mongo client"
+
+mongo --host mongodb.joindevops.online </app/schema/catalogue.js &>>$LOGFILE
+
+VALIDATE $? "loading catalogue data into mongodb"
