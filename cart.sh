@@ -76,14 +76,3 @@ systemctl start cart &>>$LOGFILE
 
 VALIDATE $? "Starting cart"
 
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRATICE/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
-
-VALIDATE $? "Copying mongo repo"
-
-yum install mongodb-org-shell -y &>>$LOGFILE
-
-VALIDATE $? "Installing mongo client"
-
-mongo --host 172.31.31.225 </app/schema/cart.js &>>$LOGFILE
-
-VALIDATE $? "loading cart data into mongodb"
