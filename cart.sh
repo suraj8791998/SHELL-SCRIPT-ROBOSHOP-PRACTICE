@@ -36,28 +36,28 @@ VALIDATE $? "INSTALLING NODEJS"
 # useradd roboshop L&>> $LOGFILE
 # VALIDATE $? "ADDING USER"
 
-# mkdir /app  $LOGFILE
-# VALIDATE $? "CREATING APP DIRECTORY" 
+mkdir /app  $LOGFILE
+VALIDATE $? "CREATING APP DIRECTORY" 
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip $LOGFILE
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>> $LOGFILE
 VALIDATE $? "DOWNLOADING THE APPLICATION CODE"
 
-cd /app  $LOGFILE
+cd /app  &>> $LOGFILE
 VALIDATE "MOVING INTO APP DIRECTORY" 
 
-unzip /tmp/cart.zip $LOGFILE
+unzip /tmp/cart.zip &>> $LOGFILE
 VALIDATE $? "UNZIPPING THE APPLICATION"
 
-npm install  $LOGFILE
+npm install  &>> $LOGFILE
 VALIDATE $? "INSTALLING THE DEPENDENCIES"
 
-systemctl daemon-reload $LOGFILE
+systemctl daemon-reload &>> $LOGFILE
 VALIDATE $? "DEAMON RELOADING"
 
-systemctl enable cart  $LOGFILE
+systemctl enable cart &>> $LOGFILE
 VALIDATE $? "ENABLING CART"
 
-systemctl start cart $LOGFILE
+systemctl start cart &>> $LOGFILE
 VALIDATE $? "STARTING CART SERVICE"
 
 
