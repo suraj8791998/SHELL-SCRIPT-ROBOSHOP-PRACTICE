@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATE=$(date +%F)
-LOGSDIR=/tmp
+LOGSDIR=/home/centos
 # /home/centos/shellscript-logs/script-name-date.log
 SCRIPT_NAME=$0
 LOGFILE=$LOGSDIR/$0-$DATE.log
@@ -27,52 +27,38 @@ VALIDATE(){
     fi
 }
 
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
+VALIDATE $? "SETTING UP NODEJS"
 
-VALIDATE $? "Setting up NPM Source"
+yum install nodejs -y  &>> $LOGFILE
+VALIDATE $? "INSTALLING NODEJS"
 
-yum install nodejs -y &>>$LOGFILE
+useradd roboshop &>> $LOGFILE
+VALIDATE $? "ADDING USER"
 
-VALIDATE $? "Installing NodeJS"
+mkdir /app 
+VALIDATE $? "CREATING APP DIRECTORY"
 
-#once the user is created, if you run this script 2nd time
-# this command will defnitely fail
-# IMPROVEMENT: first check the user already exist or not, if not exist then create
-useradd roboshop &>>$LOGFILE
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
+VALIDATE $? "DOWNLOADING THE APPLICATION CODE"
 
-#write a condition to check directory already exist or not
-mkdir /app &>>$LOGFILE
+cd /app 
+VALIDATE "MOVING INTO APP DIRECTORY"
 
-curl -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>$LOGFILE
+unzip /tmp/cart.zip
+VALIDATE $? "UNZIPPING THE APPLICATION"
 
-VALIDATE $? "downloading cart artifact"
+npm install 
+VALIDATE $? "INSTALLING THE DEPENDENCIES"
 
-cd /app &>>$LOGFILE
+systemctl daemon-reload
+VALIDATE $? "DEAMON RELOADING"
 
-VALIDATE $? "Moving into app directory"
+systemctl enable cart 
+VALIDATE $? "ENABLING CART"
 
-unzip /tmp/cart.zip &>>$LOGFILE
+systemctl start cart
+VALIDATE $? "STARTING CART SERVICE"
 
-VALIDATE $? "unzipping cart"
 
-npm install &>>$LOGFILE
-
-VALIDATE $? "Installing dependencies"
-
-# give full path of cart.service because we are inside /app
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRATICE/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
-
-VALIDATE $? "copying cart.service"
-
-systemctl daemon-reload &>>$LOGFILE
-
-VALIDATE $? "daemon reload"
-
-systemctl enable cart &>>$LOGFILE
-
-VALIDATE $? "Enabling cart"
-
-systemctl start cart &>>$LOGFILE
-
-VALIDATE $? "Starting cart"
 
