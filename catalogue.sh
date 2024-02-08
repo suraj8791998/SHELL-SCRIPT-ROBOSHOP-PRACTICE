@@ -27,28 +27,16 @@ VALIDATE $? "SETUP NODEJS REPO"
 yum install nodejs -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING NODEJS"
 
-USER_NAME=$(id roboshop) &>> $LOGS_FILE
-if [ $USER_NAME -ne 0 ]
-then  
-  echo "USER IS NOT CREATED YET, LETS CREATE USER"
-   useradd roboshop &>> $LOGS_FILE
-else
-  echo "USER IS ALREADY EXISTS"
-fi 
+useradd roboshop &>> $LOGS_FILE
+VALIDATE $? "CREATING AN USER"
 
-DIRECTORY=$(ls /app) &>> $LOGS_FILE
-if [ $DIRECTORY -ne 0 ]
-then
-  echo "APP DIRECTORY IS NOT AVAILBLE, LETS CREATE IT"
-  mkdir /app &>> $LOGS_FILE
-else
-  echo "APP DIRECTORY IS ALREADY EXISTS"
-fi 
+mkdir /app &>> $LOGS_FILE
+VALIDATE $? "CREATING APP DIRECTORY"
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "DOWNLOADING THE APPLICATION"
 
-cd /app 
+cd /app &>> $LOGS_FILE
 VALIDATE $? "MOVING INTO APPLICATION FOLDER" &>> $LOGS_FILE
 
 unzip /tmp/catalogue.zip &>> $LOGS_FILE
@@ -69,10 +57,10 @@ VALIDATE $? "STARTING CATALOGUE"
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
 VALIDATE $? "COPYING MONGO REPO"
 
-yum install mongodb-org-shell -y
+yum install mongodb-org-shell -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING MONGO REPO"
 
-mongo --host 172.31.31.225 < /app/schema/catalogue.js
+mongo --host 172.31.31.225 < /app/schema/catalogue.js &>> $LOGS_FILE
 VALIDATE $? "LOADING THE SHCEMA"
 
 
