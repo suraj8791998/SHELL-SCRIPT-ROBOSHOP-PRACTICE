@@ -33,31 +33,31 @@ VALIDATE $? "SETTING UP NODEJS"
 yum install nodejs -y  &>> $LOGFILE
 VALIDATE $? "INSTALLING NODEJS"
 
-useradd roboshop &>> $LOGFILE
+useradd roboshop L&>> $LOGFILE
 VALIDATE $? "ADDING USER"
 
-mkdir /app 
-VALIDATE $? "CREATING APP DIRECTORY"
+mkdir /app  $LOGFILE
+VALIDATE $? "CREATING APP DIRECTORY" 
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip $LOGFILE
 VALIDATE $? "DOWNLOADING THE APPLICATION CODE"
 
-cd /app 
-VALIDATE "MOVING INTO APP DIRECTORY"
+cd /app  $LOGFILE
+VALIDATE "MOVING INTO APP DIRECTORY" 
 
-unzip /tmp/cart.zip
+unzip /tmp/cart.zip $LOGFILE
 VALIDATE $? "UNZIPPING THE APPLICATION"
 
-npm install 
+npm install  $LOGFILE
 VALIDATE $? "INSTALLING THE DEPENDENCIES"
 
-systemctl daemon-reload
+systemctl daemon-reload $LOGFILE
 VALIDATE $? "DEAMON RELOADING"
 
-systemctl enable cart 
+systemctl enable cart  $LOGFILE
 VALIDATE $? "ENABLING CART"
 
-systemctl start cart
+systemctl start cart $LOGFILE
 VALIDATE $? "STARTING CART SERVICE"
 
 
