@@ -21,17 +21,20 @@ else
 fi 
 }
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGS_FILE
+cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
 VALIDATE $? "COPYING MONGO REPO"
 
-yum install mongodb-org -y &>>$LOGS_FILE
+yum install mongodb-org -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING MONGODB"
 
-sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>>$LOGS_FILE
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>> $LOGFILE
 VALIDATE $? "REPLACING THE PORT  NUMBER"
 
-systemctl enable mongod &>>$LOGS_FILE
+systemctl enable mongod &>> $LOGS_FILE
 VALIDATE $? "ENABLING MONGODB"
 
-systemctl restart mongod &>>$LOGS_FILE
+systemctl restart mongod &>> $LOGS_FILE
 VALIDATE $? "RESTARTING MONGODB"
+
+
+#FIND MONGODB LOGS PATH IS /var/log/mongodb/mongod.log
