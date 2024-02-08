@@ -27,11 +27,23 @@ VALIDATE $? "SETUP NODEJS REPO"
 yum install nodejs -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING NODEJS"
 
-useradd roboshop &>> $LOGS_FILE
-VALIDATE $? "CREATING AN USER"
+USER_NAME=$(id roboshop)
+if [ $? -ne 0 ]
+then
+  echo "USER DOES NOT EXISTS"
+  useradd roboshop &>> $LOGS_FILE
+else
+  echo "USER ALREADY EXISTS"
+fi 
 
-mkdir /app &>> $LOGS_FILE
-VALIDATE $? "CREATING APP DIRECTORY"
+$DIRECTORY=/app
+if [ -d $DIRECTORY ];
+then
+  echo "DIRECTORY EXISTS"
+else
+  echo "DIRECTORY DOES NOT EXISTS"
+  mkdir /app &>> $LOGS_FILE
+fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "DOWNLOADING THE APPLICATION"
@@ -60,7 +72,7 @@ VALIDATE $? "COPYING MONGO REPO"
 yum install mongodb-org-shell -y &>> $LOGS_FILE
 VALIDATE $? "INSTALLING MONGO REPO"
 
-mongo --host 172.31.31.225 < /app/schema/catalogue.js &>> $LOGS_FILE
+mongo --host 172.31.31.225 </app/schema/catalogue.js &>> $LOGS_FILE
 VALIDATE $? "LOADING THE SHCEMA"
 
 
