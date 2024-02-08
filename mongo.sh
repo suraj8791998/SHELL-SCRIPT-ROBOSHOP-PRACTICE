@@ -16,6 +16,7 @@ VALIDATION(){
     if [ $1 -ne 0 ];
     then 
       echo "$2...IS FAILURE"
+      exit 1
     else
         echo "$3...IS SUCCESS"
     fi 
@@ -33,8 +34,8 @@ VALIDATION $? "ENABLING MONGODB"
 systemctl start mongod &>> $LOGS_FILE
 VALIDATION $? "STARTING MONGODB"
 
-sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>> $LOGFILE
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>> $LOGS_FILE
 VALIDATION $? "REPLACING ADDRESS IN MONGOD.CONF"
 
-systemctl restart mongod &>> $LOGFILE
+systemctl restart mongod &>> $LOGS_FILE
 VALIDATION $? "RESTARTING MONGODB"
