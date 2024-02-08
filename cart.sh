@@ -51,7 +51,7 @@ VALIDATE $? "UNZIPPING THE APPLICATION"
 npm install  &>> $LOGFILE
 VALIDATE $? "INSTALLING THE DEPENDENCIES"
 
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/cart.service /etc/systemd/system/cart.service  &>> $LOGFILE
+cp //home/centos/SHELL-SCRIPT-ROBOSHOP-PRATICE/cart.service /etc/systemd/system/cart.service  &>> $LOGFILE
 VALIDATE $? "COPYING CART SERVICE"
 
 systemctl daemon-reload &>> $LOGFILE
