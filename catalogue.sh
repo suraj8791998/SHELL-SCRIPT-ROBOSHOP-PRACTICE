@@ -45,7 +45,7 @@ VALIDATE $? "UNZIIPING THE APPLICATION"
 npm install  &>> $LOGS_FILE
 VALIDATE $? "DOWNLOADING THE DEPENDENCIES"
 
-cp catalogue.sh /etc/systemd/system/catalogue.service &>> $LOGS_FILE
+cp catalogue.sevice /etc/systemd/system/catalogue.service &>> $LOGS_FILE
 VALIDATE $? "COPYING CATALOGUE SERVICE"
 
 systemctl daemon-reload &>> $LOGS_FILE
