@@ -39,3 +39,4 @@ VALIDATE $? "STARTING MYSQLD"
 mysql_secure_installation --set-root-pass RoboShop@1 &>> $LOGS_FILE
 VALIDATE $? "CHANGING DEFAULT ROOT PASSWORD"
 
+#FIND MONGODB LOGS PATH IS /var/log/mysql/mysql.log
