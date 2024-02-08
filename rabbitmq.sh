@@ -21,23 +21,23 @@ else
 fi 
 }
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>> $LOGS_FILE
 VALIDATE $? "CONFIGURING YUM REPO BY SCRIPT PROVIDER"
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>> $LOGS_FILE
 VALIDATE $? "CONFIGURE YUM REPO BY RABBITMQ"
 
-yum install rabbitmq-server -y 
+yum install rabbitmq-server -y  &>> $LOGS_FILE
 VALIDATE $? "INSTALLING RABBITMQ SERVER"
 
-systemctl enable rabbitmq-server 
+systemctl enable rabbitmq-server  &>> $LOGS_FILE
 VALIDATE $? "ENABLING RABBITMQ SERVER"
-
-systemctl start rabbitmq-server 
+ 
+systemctl start rabbitmq-server  &>> $LOGS_FILE
 VALIDATE $? "STARTING RABBITMQ SERVER"
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop roboshop123 &>> $LOGS_FILE
 VALIDATE $? "ADDING USER FOR APPLICATION"
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>> $LOGS_FILE
 VALIDATE $? "SETTING PERMISSIONS"
