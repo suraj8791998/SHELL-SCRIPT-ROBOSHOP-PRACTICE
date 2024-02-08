@@ -32,7 +32,7 @@ USER_NAME=$(id roboshop)
 if [ $? -ne 0 ];
 then 
     echo "USER DOES NOT EXISTS; LETS CREATE USER"
-    useradd roboshop
+    useradd roboshop &>>$LOGS_FILE
 else
     echo "USER IS ALREADY EXISTS"
 fi 
@@ -41,7 +41,7 @@ DIRECTORY_PATH=$(cd /app)
 if [ $? -ne 0 ];
 then
     echo "DIRECTORY DOES NOT EXISTS"
-    mkdir /app
+    mkdir /app &>>$LOGS_FILE
 else
     echo "DIRECTORY ALREADY EXISTS"
 fi 
