@@ -42,7 +42,7 @@ VALIDATE $? "GO TO HTML PATH"
 unzip /tmp/web.zip &>> $LOGS_FILE
 VALIDATE $? "UNZIPPING THE APPLICATION"
 
-CP /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/roboshop.conf   /etc/nginx/default.d/roboshop.conf  &>> $LOGS_FILE
+cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/roboshop.conf   /etc/nginx/default.d/roboshop.conf  &>> $LOGS_FILE
 VALIDATE $? "COPYING FILES"
 
 systemctl restart nginx &>> $LOGS_FILE
