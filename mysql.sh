@@ -25,7 +25,7 @@ VALIDATION(){
 yum module disable mysql -y &>> $LOGS_FILE
 VALIDATION $? "DISABLING DEFAULT MYSQL"
 
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE  /etc/yum.repos.d/mysql.repo
+cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/mysql.repo  /etc/yum.repos.d/mysql.repo
 VALIDATION $? "COPYING MYSQL.REPO"
 
 yum install mysql-community-server -y &>> $LOGS_FILE
