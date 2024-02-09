@@ -65,10 +65,10 @@ systemctl daemon-reload &>> $LOGS_FILE
 VALIDATION $? "DEAMON RELOADING"
 
 systemctl enable user  &>> $LOGS_FILE
-VALIDATE $? "ENABLING USER"
+VALIDATION $? "ENABLING USER"
 
 systemctl start user &>> $LOGS_FILE
-VALIDATE $? "STARTING USER"
+VALIDATION $? "STARTING USER"
 
 cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATION $? "COPYING MONGO.REPO"
