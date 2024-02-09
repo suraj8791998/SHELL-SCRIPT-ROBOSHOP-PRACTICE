@@ -28,7 +28,7 @@ yum install nodejs -y  &>> $LOGS_FILE
 VALIDATION $? "INSTALLING NODEJS APPLICATION"
 
 
-USER_NAME=$(id roboshop)
+USER_NAME=$(id roboshop) &>> $LOGS_FILE
 if [ $? -ne 0 ];
 then 
     echo "USER DOES NOT EXISTS; LETS CREATE USER"
@@ -37,7 +37,7 @@ else
     echo "USER IS ALREADY EXISTS"
 fi 
 
-DIRECTORY_PATH=$(cd /app)
+DIRECTORY_PATH=$(cd /app) &>> $LOGS_FILE
 if [ $? -ne 0 ];
 then
     echo "DIRECTORY DOES NOT EXISTS"
