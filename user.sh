@@ -25,7 +25,7 @@ curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGS_FILE
 VALIDATE $? "SETTING UP NODEJS"
 
 yum install nodejs -y  &>> $LOGS_FILE
-VALIDATE $? "INSTALLING NODEJS"
+VALIDATION $? "INSTALLING NODEJS"
 
 
 USER_NAME=$(id roboshop) &>> $LOGS_FILE
