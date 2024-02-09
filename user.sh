@@ -11,18 +11,19 @@ then
   echo "ERROR:: PLEASE SWITCH TO ROOT USER"
   exit1
 fi 
-
-VALIDATE(){
+VALIDATION(){
     if [ $1 -ne 0 ];
     then 
       echo "$2...IS FAILURE"
+      exit 1
     else
-      echo "$2...IS SUCCESS"
+        echo "$2...IS SUCCESS"
     fi 
 }
 
+
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGS_FILE
-VALIDATE $? "SETTING UP NODEJS"
+VALIDATION $? "SETTING UP NODEJS"
 
 yum install nodejs -y  &>> $LOGS_FILE
 VALIDATION $? "INSTALLING NODEJS"
@@ -58,7 +59,7 @@ VALIDATION $? "UNZIPPING THE APPLICATION"
 npm install  &>> $LOGS_FILE
 VALIDATION $? "INSTALLING DEPENDENCIES"
 
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/user.service /etc/systemd/system/user.service
+cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/user.service /etc/systemd/system/user.service &>> $LOGS_FILE
 VALIDATION $? "COPYING USER SERVICE"
 
 systemctl daemon-reload &>> $LOGS_FILE
@@ -70,7 +71,7 @@ VALIDATION $? "ENABLING USER"
 systemctl start user &>> $LOGS_FILE
 VALIDATION $? "STARTING USER"
 
-cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/mongo.repo /etc/yum.repos.d/mongo.repo
+cp /home/centos/SHELL-SCRIPT-ROBOSHOP-PRACTICE/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
 VALIDATION $? "COPYING MONGO.REPO"
 
 yum install mongodb-org-shell -y &>> $LOGS_FILE
